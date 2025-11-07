@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Writing Eco - 나의 환경 기록 일기</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: "Pretendard", sans-serif;
+        background: #f9fdf7;
+        scroll-behavior: smooth;
+        color: #333;
+    }
+
+    header {
+        padding: 60px 20px;
+        text-align: center;
+        background: #e3f7e8;
+    }
+
+    .logo {
+        font-size: 45px;
+        font-weight: 900;
+        color: #6bbf72;
+    }
+
+    .subtitle {
+        margin-top: 10px;
+        font-size: 18px;
+        color: #4b7f56;
+    }
+
+    section {
+        padding: 60px 20px;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    h2 {
+        color: #5cae66;
+        font-weight: 800;
+    }
+
+    /* 달력 */
+    .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    .day {
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.25s;
+        box-shadow: 0px 2px 4px rgba(0,0,0,0.08);
+    }
+    .day:hover {
+        background: #eaf9ed;
+    }
+
+    /* 색 변화 */
+    .good {
+        background: #b5ebc4 !important;
+    }
+    .bad {
+        background: #ffb3b3 !important;
+    }
+
+    /* 기록창 모달 */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.4);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        width: 300px;
+        text-align: center;
+    }
+
+    button {
+        margin-top: 10px;
+        padding: 10px 15px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        background: #6bbf72;
+        color: white;
+        font-weight: 700;
+    }
+
+    button:hover {
+        opacity: 0.85;
+    }
+
+    .small {
+        font-size: 12px;
+        opacity: 0.6;
+        margin-top: 8px;
+    }
+
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">❄️ Writing Eco</div>
+    <div class="subtitle">“나의 환경 기록 일기”</div>
+    <div style="margin-top:10px;font-size:14px;color:#4b7f56;">
+        🌎 북극곰이 지구를 안고 있는 상징처럼, 내 작은 기록이 지구를 지켜요.
+    </div>
+</header>
+
+<section id="calendar-section">
+    <h2>📅 오늘의 환경 기록 달력</h2>
+    <p>오늘 텀블러 사용, 대중교통 이용, 일회용품 줄이기 같은 실천을 기록해보세요.<br>
+    좋은 행동은 초록색, 좋지 않은 행동은 빨간색으로 표시됩니다.</p>
+
+    <div class="calendar" id="calendar"></div>
+</section>
+
+<!-- 모달창 -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h3>오늘 어떤 날이었나요?</h3>
+        <button onclick="markDay('good')">✅ 환경에 좋은 일 했어요</button>
+        <button style="background:#ff6f6f" onclick="markDay('bad')">❌ 환경에 나쁜 일 했어요</button>
+        <div class="small">예: 텀블러/분리수거/일회용 컵 사용</div>
+    </div>
+</div>
+
+<script>
+    const calendar = document.getElementById("calendar");
+    const modal = document.getElementById("modal");
+    let selectedDay = null;
+
+    // 오늘 날짜
+    const today = new Date();
+    const currentDate = today.getDate();
+
+    // 달력 30칸 생성
+    for (let i = 1; i <= 30; i++) {
+        const day = document.createElement("div");
+        day.className = "day";
+        day.innerHTML = i + "일";
+
+        if (i === currentDate) {
+            day.style.border = "3px solid #6bbf72";
+        }
+
+        day.onclick = function () {
+            selectedDay = day;
+            modal.style.display = "flex";
+        };
+
+        calendar.appendChild(day);
+    }
+
+    // 기록 반영
+    function markDay(type) {
+        if (type === "good") {
+            selectedDay.classList.remove("bad");
+            selectedDay.classList.add("good");
+        } else {
+            selectedDay.classList.remove("good");
+            selectedDay.classList.add("bad");
+        }
+        modal.style.display = "none";
+    }
+
+    // 모달 외부 클릭 닫기
+    window.onclick = function (e) {
+        if (e.target === modal) modal.style.display = "none";
+    };
+</script>
+
+<section style="background:#e3f7e8;border-radius:10px;margin-bottom:80px;">
+    <h2>🌿 작은 실천이 지구의 색을 바꿉니다</h2>
+    <p>
+        Writing Eco는 환경을 “기록하고 보는 것”만으로도 행동을 바꿀 수 있다는 아이디어에서 시작되었습니다.<br>
+        초록색 칸이 많아질수록 나의 일상도, 지구의 색도 더 맑아집니다.<br><br>
+        당신의 하루가 지구에게 어떤 의미였는지, 오늘도 기록해보세요.
+    </p>
+</section>
+
+</body>
+</html>
